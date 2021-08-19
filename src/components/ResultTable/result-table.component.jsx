@@ -144,7 +144,7 @@ VALUES {showResult()}
        <div className={classes.column}>
         <b>Nội Dung (HTML): </b>
         <pre className={classes.pre}>
-         <code dangerouslySetInnerHTML={{ __html: item[2] }}></code>
+         <code dangerouslySetInnerHTML={{ __html: item[2].replaceAll("&lsqb;&quest;&rsqb;", "♥") }}></code>
         </pre>
         <b>Nội Dung CSS: </b>
         <br />
@@ -153,7 +153,7 @@ VALUES {showResult()}
          <pre className={classes.pre}>
           <code
            dangerouslySetInnerHTML={{
-            __html: item[3].replace("&lsqb;&quest;&rsqb;", "♥"),
+            __html: item[3].replaceAll("&lsqb;&quest;&rsqb;", "♥"),
            }}
           ></code>
          </pre>
