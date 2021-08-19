@@ -97,14 +97,14 @@ function DetailedAccordion({ sheetData }) {
   .join("(")
   .split(/[\}\]]/)
   .join(")")
-  .replaceAll(/\:'|\:\s'|\s\:'|\s\:\s'/g,':')
-  .replaceAll(/\.'|\.\s'|\s\.'|\s\.\s'/g,'.')
+  .replaceAll(/\:'|\:\s'|\s\:'|\s\:\s'/g,":'")
   .replaceAll("\\'",'"')
   .replace(/'N'/g,"N'")
   .replaceAll("?''","?'")
   .replaceAll("='",'="')
 .replace(/\\n|\\r/g, '')
 .slice(0,-1).slice(1)
+console.log(convertedData)
     navigator.clipboard.writeText(
        ' INSERT INTO tblBaiTap (TieuDe,NoiDung,NoiDungCSS,OUTPUT,LoaiBaiTap,NgonNgu,CapDo,GhiChu,DaXoa,NgayTao) VALUES'+
               convertedData
