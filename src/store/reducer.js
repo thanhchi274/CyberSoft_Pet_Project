@@ -2,17 +2,18 @@ import * as ActionType from "./action.type";
 let initialState = {
  data: [],
  sheetData: [],
- loading: true,
+ option:null
 };
 const reducer = (state = initialState, action) => {
  switch (action.type) {
   case ActionType.GET_SHEETS: {
    state.data = action.data;
-   return { ...state, loading: false };
+   return { ...state };
   }
   case ActionType.GET_SHEETS_DETAIL: {
    state.sheetData = action.sheetData;
-   return { ...state, loading: false };
+   state.option=action.option
+   return { ...state };
   }
   default:
    return { ...state };

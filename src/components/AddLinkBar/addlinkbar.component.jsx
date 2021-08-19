@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import LinkIcon from "@material-ui/icons/Link";
@@ -8,18 +7,7 @@ import { connect } from "react-redux";
 import DropDown from "../../components/DropDown/dropdown.component";
 import * as act from "../../store/action";
 import {  toast } from 'material-react-toastify';
-const useStyles = makeStyles((theme) => ({
- margin: {
-  margin: theme.spacing(1),
- },
- grid: {
-  justifyContent: "center",
-  "& .MuiInput-root": {
-   width: "800px",
-  },
- },
-}));
-
+import { useStyles } from "./useStyles";
 function AddLinkBar({ getData }) {
  const classes = useStyles();
  const [txtLink, setTxtLink] = useState("");

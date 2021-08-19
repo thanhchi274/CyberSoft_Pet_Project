@@ -31,6 +31,7 @@ export const getSheetsDetail = (data) => {
     dispatch({
      type: await ActionTypes.GET_SHEETS_DETAIL,
      sheetData: await result.data,
+     option: option
     });
    })
    .catch((err) => {

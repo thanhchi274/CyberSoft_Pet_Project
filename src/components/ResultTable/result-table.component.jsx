@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -12,104 +11,68 @@ import IconButton from "@material-ui/core/IconButton";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import { DateTime } from "luxon";
 import {  toast } from 'material-react-toastify';
-const useStyles = makeStyles((theme) => ({
- root: {
-  width: "100%",
- },
- heading: {
-  fontSize: theme.typography.pxToRem(15),
-  fontWeight: 700,
-  wordBreak: "break-all",
- },
- secondaryHeading: {
-  fontSize: theme.typography.pxToRem(15),
-  color: theme.palette.text.secondary,
- },
- icon: {
-  verticalAlign: "bottom",
-  height: 20,
-  width: 20,
- },
- details: {
-  alignItems: "center",
- },
- column: {
-  flexBasis: "25%",
-  wordBreak: "break-all",
- },
- columnSQLHeading: {
-  flexBasis: "5%",
- },
- columnSQL: {
-  flexBasis: "95%",
- },
- helper: {
-  borderLeft: `2px solid ${theme.palette.divider}`,
-  padding: theme.spacing(1, 2),
-  height: "100%",
- },
- code: {},
- link: {
-  color: theme.palette.primary.main,
-  textDecoration: "none",
-  "&:hover": {
-   textDecoration: "underline",
-  },
- },
- pre: {
-  whiteSpace: "pre-wrap",
-  wordBreak: "break-all",
-  "& code": {
-   fontSize: "12px",
-  },
- },
-}));
-
-function DetailedAccordion({ sheetData }) {
+import { useStyles } from "./useStyles";
+import { convertData } from "./convertData";
+function DetailedAccordion({ sheetData ,option}) {
  const classes = useStyles();
  const textAreaRef = useRef(null);
  const [data, setData] = useState([]);
  useEffect(() => {
   setData(sheetData);
  }, [sheetData]);
- const handleClick = (event) => {
+ function mapData() {
   let currentDate = DateTime.now().toFormat("yyyy-LL-dd HH:mm:ss");
   let copyData = [];
-  let specialSheet =data.range.includes('fill_inblank_code')
+  let sheetOptionNumber = filterSheetOption();
   data.values.map((item, index) => {
-   let rawData = [
-    `N'`+`${item[1]}`,
-    item[2],
-    specialSheet?"":item[3],
-    specialSheet?item[3]:item[4],
-    'fill_inblank_code',
-    "",
-    item[8],
-    "",
-    "",
-    currentDate,
-   ];
-   return index > 0 && item[1]!=="" ? copyData.push(rawData) : null;
+    let rawData = [
+      `N'` + `${item[1]}`,
+      item[2],
+      sheetOptionNumber==='1' ? "" : item[3],
+      sheetOptionNumber==='1' ? item[3] : item[4],
+      sheetOptionNumber,
+      "",
+      item[8],
+      "",
+      "",
+      currentDate,
+    ];
+    return index > 0 && item[1] !== "" ? copyData.push(rawData) : null;
   });
-  let convertedData=  JSON.stringify(copyData)
-  .split('"').join("'")
-  .split(/[\{\[]/)
-  .join("(")
-  .split(/[\}\]]/)
-  .join(")")
-  .replaceAll(/\:'|\:\s'|\s\:'|\s\:\s'/g,":'")
-  .replaceAll("\\'",'"')
-  .replace(/'N'/g,"N'")
-  .replaceAll("?''","?'")
-  .replaceAll("='",'="')
-.replace(/\\n|\\r/g, '')
-.slice(0,-1).slice(1)
-console.log(convertedData)
-    navigator.clipboard.writeText(
-       ' INSERT INTO tblBaiTap (TieuDe,NoiDung,NoiDungCSS,OUTPUT,LoaiBaiTap,NgonNgu,CapDo,GhiChu,DaXoa,NgayTao) VALUES'+
-              convertedData
-    );
-    toast.success(`Copied Table ${data.range}!`);
+  return copyData;
+}
+function filterSheetOption() {
+  let sheetOptionNumber = '';
+  switch (option) {
+    case 'single_choice':
+      sheetOptionNumber = '4';
+      break;
+    case 'multiple_choice':
+      sheetOptionNumber = '5';
+      break;
+    case 'fill_inblank_input':
+      sheetOptionNumber = '3';
+      break;
+    case 'fill_inblank_html_css':
+      sheetOptionNumber = '2';
+      break;
+    case 'fill_inblank_code':
+      sheetOptionNumber = '1';
+      break;
+    default:
+      break;
+  }
+  return sheetOptionNumber;
+}
+function showResult() {
+  let copyData = mapData();
+  let convertedData = convertData(copyData);
+  return convertedData;
+}
+ const handleClick = event => {
+  let convertedData = showResult();
+  navigator.clipboard.writeText('INSERT INTO tblBaiTap (TieuDe,NoiDung,NoiDungCSS,OUTPUT,LoaiBaiTap,NgonNgu,CapDo,GhiChu,DaXoa,NgayTao) VALUES'+convertedData);
+  toast.success(`Copied Table ${filterSheetOption()}!`);
  };
  return data.values.length > 0 ? (
   <div className={classes.root}>
@@ -131,8 +94,7 @@ console.log(convertedData)
       <AccordionDetails>
        <pre className={classes.pre}>
         <code ref={textAreaRef}>
-         {" "}
-         "INSERT INTO <b>Tên Bảng</b>(
+         INSERT INTO tblBaiTap(
     TieuDe,
     NoiDung,
     NoiDungCSS,
@@ -144,8 +106,7 @@ console.log(convertedData)
     DaXoa,
     NgayTao
 )
-VALUES
-" + (<b>Dữ Liệu 1</b>),(<b>Dữ Liệu 2</b>),...
+VALUES {showResult()}
         </code>
        </pre>
        <br />
@@ -192,7 +153,7 @@ VALUES
          <pre className={classes.pre}>
           <code
            dangerouslySetInnerHTML={{
-            __html: item[3].replace("&lsqb;&quest;&rsqb;", "&#x1F90D"),
+            __html: item[3].replace("&lsqb;&quest;&rsqb;", "&#x2665"),
            }}
           ></code>
          </pre>
@@ -250,6 +211,7 @@ VALUES
 const mapStateToProps = (state) => {
  return {
   sheetData: state.reducer.sheetData,
+  option:state.reducer.option
  };
 };
 export default connect(mapStateToProps, null)(DetailedAccordion);
