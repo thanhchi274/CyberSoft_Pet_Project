@@ -74,12 +74,13 @@ function DetailedAccordion({ sheetData }) {
  const handleClick = (event) => {
   let currentDate = DateTime.now().toFormat("yyyy-LL-dd HH:mm:ss");
   let copyData = [];
+  let specialSheet =data.range.includes('fill_inblank_code')
   data.values.map((item, index) => {
    let test = [
     `N'`+`${item[1]}'`,
     item[2],
-    item[3],
-    item[4],
+    specialSheet?"":item[3],
+    specialSheet?item[3]:item[4],
     'fill_inblank_code',
     "",
     item[8],
@@ -95,14 +96,15 @@ function DetailedAccordion({ sheetData }) {
   .join("(")
   .split(/[\}\]]/)
   .join(")")
-  .replaceAll("\\'","'")
+  .replaceAll("\\'",'"')
   .replace(/'N'/g,"N'")
   .replaceAll("?''","?'")
   .replaceAll("='",'="')
-  .replaceAll("'>",'">')
 .replace(/\\n|\\r/g, '')
 .slice(0,-1).slice(1)
-    navigator.clipboard.writeText(convertedData
+    navigator.clipboard.writeText(
+       '   INSERT INTO tblBaiTap (TieuDe,NoiDung,NoiDungCSS,OUTPUT,LoaiBaiTap,NgonNgu,CapDo,GhiChu,DaXoa,NgayTao) VALUES'+
+              convertedData
     );
  };
  return data.values.length > 0 ? (
@@ -195,15 +197,6 @@ VALUES
        <div className={clsx(classes.column, classes.helper)}>
         <pre className={classes.pre}>
          <code className={classes.code}>
-                   {/* {
-                   console.log(JSON.stringify(item[4]).split('"').join("'").replaceAll("\\'",'"')
-.replace(/\\n|\\r/g, '')
-//   .split(/[\{\[]/)
-//   .join("(")
-//   .split(/[\}\]]/)
-//   .join(")")
-  )
-  } */}
           {item[4] === "" ? item[3] : item[4]}
          </code>
         </pre>
