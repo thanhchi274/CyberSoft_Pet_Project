@@ -78,7 +78,7 @@ function DetailedAccordion({ sheetData }) {
   let specialSheet =data.range.includes('fill_inblank_code')
   data.values.map((item, index) => {
    let rawData = [
-    `N'`+`${item[1]}'`,
+    `N'`+`Lợi ích của việc học NodeJS : '`,
     item[2],
     specialSheet?"":item[3],
     specialSheet?item[3]:item[4],
@@ -97,14 +97,16 @@ function DetailedAccordion({ sheetData }) {
   .join("(")
   .split(/[\}\]]/)
   .join(")")
+  .replaceAll(/\:'|\:\s'|\s\:'|\s\:\s'/g,':')
   .replaceAll("\\'",'"')
   .replace(/'N'/g,"N'")
   .replaceAll("?''","?'")
   .replaceAll("='",'="')
 .replace(/\\n|\\r/g, '')
 .slice(0,-1).slice(1)
+console.log(convertedData)
     navigator.clipboard.writeText(
-       '   INSERT INTO tblBaiTap (TieuDe,NoiDung,NoiDungCSS,OUTPUT,LoaiBaiTap,NgonNgu,CapDo,GhiChu,DaXoa,NgayTao) VALUES'+
+       ' INSERT INTO tblBaiTap (TieuDe,NoiDung,NoiDungCSS,OUTPUT,LoaiBaiTap,NgonNgu,CapDo,GhiChu,DaXoa,NgayTao) VALUES'+
               convertedData
     );
     toast.success(`Copied Table ${data.range}!`);
