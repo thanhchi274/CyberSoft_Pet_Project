@@ -88,7 +88,7 @@ function DetailedAccordion({ sheetData }) {
     "",
     currentDate,
    ];
-   return index > 14 ? copyData.push(test) : null;
+   return index > 0 ? copyData.push(test) : null;
   });
   let convertedData=  JSON.stringify(copyData)
   .split('"').join("'")
