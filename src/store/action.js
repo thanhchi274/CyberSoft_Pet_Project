@@ -12,6 +12,7 @@ export const getSheets = (spreadsheetsId) => {
      type: await ActionTypes.GET_SHEETS,
      data: await result.data,
     });
+    toast.success('Get Success');
    })
    .catch((err) => {
     toast.error('Have Error! Please Check Again');
