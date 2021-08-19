@@ -5,7 +5,7 @@ export function convertData(copyData) {
     .join("(")
     .split(/[\}\]]/)
     .join(")")
-    .replaceAll("&lsqb;&quest;&rsqb;", "&#x2665")
+    .replaceAll("&lsqb;&quest;&rsqb;", "♥")
     .replaceAll(/\:'|\:\s'|\s\:'|\s\:\s'/g, ":'")
     .replaceAll("\\'", '"')
     .replace(/'N'/g, "N'")

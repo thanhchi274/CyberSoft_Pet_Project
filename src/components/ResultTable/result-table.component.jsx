@@ -153,7 +153,7 @@ VALUES {showResult()}
          <pre className={classes.pre}>
           <code
            dangerouslySetInnerHTML={{
-            __html: item[3].replace("&lsqb;&quest;&rsqb;", "&#x2665"),
+            __html: item[3].replace("&lsqb;&quest;&rsqb;", "♥"),
            }}
           ></code>
          </pre>
