@@ -78,7 +78,7 @@ function DetailedAccordion({ sheetData }) {
   let specialSheet =data.range.includes('fill_inblank_code')
   data.values.map((item, index) => {
    let rawData = [
-    `N'`+`Lợi ích của việc học NodeJS : '`,
+    `N'`+`${item[1]}`,
     item[2],
     specialSheet?"":item[3],
     specialSheet?item[3]:item[4],
