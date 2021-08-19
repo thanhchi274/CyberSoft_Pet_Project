@@ -27,9 +27,9 @@ function DetailedAccordion({ sheetData ,option}) {
   data.values.map((item, index) => {
     let rawData = [
       `N'` + `${item[1]}`,
-      item[2],
-      sheetOptionNumber==='1' ? "" : item[3],
-      sheetOptionNumber==='1' ? item[3] : item[4],
+      `N'` + `${item[2]}`,
+      sheetOptionNumber==='1' ? "" : `N'` + `${item[3]}`,
+      sheetOptionNumber==='1' ? `N'` + `${item[3]}` : `N'` + `${item[4]}`,
       sheetOptionNumber,
       "",
       item[8],
