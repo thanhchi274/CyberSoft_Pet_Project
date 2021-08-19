@@ -11,6 +11,7 @@ import { connect } from "react-redux";
 import IconButton from "@material-ui/core/IconButton";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import { DateTime } from "luxon";
+import {  toast } from 'material-react-toastify';
 const useStyles = makeStyles((theme) => ({
  root: {
   width: "100%",
@@ -76,7 +77,7 @@ function DetailedAccordion({ sheetData }) {
   let copyData = [];
   let specialSheet =data.range.includes('fill_inblank_code')
   data.values.map((item, index) => {
-   let test = [
+   let rawData = [
     `N'`+`${item[1]}'`,
     item[2],
     specialSheet?"":item[3],
@@ -88,7 +89,7 @@ function DetailedAccordion({ sheetData }) {
     "",
     currentDate,
    ];
-   return index > 0 ? copyData.push(test) : null;
+   return index > 0 && item[1]!=="" ? copyData.push(rawData) : null;
   });
   let convertedData=  JSON.stringify(copyData)
   .split('"').join("'")
@@ -106,6 +107,7 @@ function DetailedAccordion({ sheetData }) {
        '   INSERT INTO tblBaiTap (TieuDe,NoiDung,NoiDungCSS,OUTPUT,LoaiBaiTap,NgonNgu,CapDo,GhiChu,DaXoa,NgayTao) VALUES'+
               convertedData
     );
+    toast.success(`Copied Table ${data.range}!`);
  };
  return data.values.length > 0 ? (
   <div className={classes.root}>

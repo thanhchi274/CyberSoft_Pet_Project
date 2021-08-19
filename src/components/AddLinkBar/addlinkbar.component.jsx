@@ -7,6 +7,7 @@ import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
 import DropDown from "../../components/DropDown/dropdown.component";
 import * as act from "../../store/action";
+import {  toast } from 'material-react-toastify';
 const useStyles = makeStyles((theme) => ({
  margin: {
   margin: theme.spacing(1),
@@ -24,11 +25,16 @@ function AddLinkBar({ getData }) {
  const [txtLink, setTxtLink] = useState("");
  const [ID, setID] = useState("");
  const handleSubmit = () => {
-  let spreadsheetId = new RegExp("/spreadsheets/d/([a-zA-Z0-9-_]+)").exec(
-   txtLink
-  )[1];
-  setID(spreadsheetId);
-  getData(spreadsheetId);
+          if(txtLink.match(RegExp("/spreadsheets/d/([a-zA-Z0-9-_]+)"))){
+                    let spreadsheetId = new RegExp("/spreadsheets/d/([a-zA-Z0-9-_]+)").exec(
+                              txtLink
+                             )[1];
+                    setID(spreadsheetId);
+                    getData(spreadsheetId);
+            }
+            else {
+                      toast.error('Please check your link')
+            }
  };
  return (
   <div>

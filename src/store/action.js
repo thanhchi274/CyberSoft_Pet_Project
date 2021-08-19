@@ -1,4 +1,5 @@
 import * as ActionTypes from "./action.type";
+import {  toast } from 'material-react-toastify';
 import axios from "axios";
 export const getSheets = (spreadsheetsId) => {
  return (dispatch) => {
@@ -13,6 +14,7 @@ export const getSheets = (spreadsheetsId) => {
     });
    })
    .catch((err) => {
+    toast.error('Have Error! Please Check Again');
     return err;
    });
  };
@@ -31,6 +33,7 @@ export const getSheetsDetail = (data) => {
     });
    })
    .catch((err) => {
+    toast.error('Have Error! Please Check Again');
     return err;
    });
  };
